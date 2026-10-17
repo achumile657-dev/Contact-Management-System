@@ -10,5 +10,9 @@ package main;
  * @author USER
  */
 public class Contact {
+<<<<<<< HEAD
     //testing 
+=======
+  
+>>>>>>> 61dea90 (Update contact management classes)
 }

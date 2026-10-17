@@ -18,15 +18,19 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner sc = new Scanner(System.in);
+    
     FileHandler fileHandler = new FileHandler();
     fileHandler.createFile();
-   
+    System.out.print("Enter name: ");
+String name = sc.nextLine();
+
+System.out.print("Enter phone number: ");
+String phoneNumber = sc.nextLine();
+
+System.out.print("Enter email: ");
+String email = sc.nextLine();
+   Contact contact = new Contact(String name,String phoneNumber,String email);
+   ContactManager manager = new ContactManager();
+    manager.addContact(contact);
     
-    System.out.println("Name");
-    String name = sc.nextLine();
-     System.out.println("Phone number");
-    String phoneNumber = sc.nextLine();
-     System.out.println("Email");
-    String email = sc.nextLine();
-     fileHandler.writeFile(name, phoneNumber, email);
     }}
