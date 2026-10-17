@@ -23,14 +23,24 @@ public class Main {
     fileHandler.createFile();
     System.out.print("Enter name: ");
 String name = sc.nextLine();
+    
+   System.out.print("Enter first name(s): ");
+   String firstName = sc.nextLine();
 
-System.out.print("Enter phone number: ");
-String phoneNumber = sc.nextLine();
+   System.out.print("Enter last name: ");
+   String lastName=sc.nextLine();
+   
+   System.out.print("Enter phone number: ");
+   String phoneNumber = sc.nextLine();
 
-System.out.print("Enter email: ");
-String email = sc.nextLine();
-   Contact contact = new Contact(String name,String phoneNumber,String email);
+   System.out.print("Enter email: ");
+   String email = sc.nextLine();
+   
+   Contact contact = new Contact(firstName,lastName,phoneNumber, email);
    ContactManager manager = new ContactManager();
     manager.addContact(contact);
     
+    fileHandler.writeFile(firstName, lastName,phoneNumber, email);
+    
+    System.out.println("Contact added successfully");
     }}

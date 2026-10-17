@@ -29,10 +29,10 @@ System.out.println("File already exists");}
 System.out.println("Error");
 }
 }
-public void writeFile(String name,String phoneNumber,String email){
+public void writeFile(String firstname,String lastName,String phoneNumber,String email){
 
 try(Formatter formatter = new Formatter(new FileWriter("Contacts.csv"))){
-formatter.format("%-20s%-15s%-30s%n" ,name ,phoneNumber ,email);
+formatter.format("%-20s%-15s%-30s%n" ,firstname ,lastName,phoneNumber ,email);
 
 }
 catch(IOException e){

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 public class ContactManager {
     private List<Contact> contacts = new ArrayList<>();
-     public static void addContact(Contact contact) {
+     public void addContact(Contact contact) {
      contacts.add(contact);
      }
 
