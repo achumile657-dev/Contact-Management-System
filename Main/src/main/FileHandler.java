@@ -31,7 +31,7 @@ System.out.println("Error");
 }
 public void writeFile(String firstname,String lastName,String phoneNumber,String email){
 
-try(Formatter formatter = new Formatter(new FileWriter("Contacts.csv"))){
+try(Formatter formatter = new Formatter(new FileWriter("Contacts.csv" ,true))){
 formatter.format("%-20s%-15s%-30s%n" ,firstname ,lastName,phoneNumber ,email);
 
 }
