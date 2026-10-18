@@ -21,8 +21,7 @@ public class Main {
     
     FileHandler fileHandler = new FileHandler();
     fileHandler.createFile();
-    System.out.print("Enter name: ");
-String name = sc.nextLine();
+   
     
     System.out.print("Enter first name: ");
    String firstName = sc.nextLine();
