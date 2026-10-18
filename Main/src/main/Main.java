@@ -21,6 +21,10 @@ public class Main {
     
     FileHandler fileHandler = new FileHandler();
     fileHandler.createFile();
+    
+    ContactManager cm = new ContactManager();
+    
+    System.out.println("CONTACT MANAGEMENT SYSTEM \n");
    
     
     System.out.print("Enter first name: ");
