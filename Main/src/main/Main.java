@@ -26,6 +26,7 @@ public class Main {
     
     System.out.println("CONTACT MANAGEMENT SYSTEM \n");
    
+    System.out.println("Cntact list empty!! Add your first contact!!");
     
     System.out.print("Enter first name: ");
    String firstName = sc.nextLine();
@@ -42,10 +43,55 @@ public class Main {
    String email = sc.nextLine();
    
    Contact contact = new Contact(firstName,lastName,phoneNumber, email);
-   ContactManager manager = new ContactManager();
-    manager.addContact(contact);
+    cm.addContact(contact);
     
     fileHandler.writeFile(firstName, lastName,phoneNumber, email);
     
-    System.out.println("Contact added successfully");
+    System.out.println("Contact added successfully!!");
+    
+    boolean running = true;
+
+        while (running) {
+        System.out.println("1. Add Contact");
+        System.out.println("2. Search Contact");
+        System.out.println("3. Edit Contact");
+        System.out.println("4. Delete Contact");
+            
+        System.out.print("Choose an option: ");
+        
+        int option = sc.nextInt();
+        
+        switch (option) {
+                case 1:
+                    // Add Contact
+                    System.out.print("Enter First Name: ");
+                    firstName = sc.nextLine();
+                    System.out.print("Enter Last Name: ");
+                    lastName = sc.nextLine();
+                    System.out.print("Enter Phone Number: ");
+                    phoneNumber = sc.nextLine();
+                    System.out.print("Enter Email: ");
+                    email = sc.nextLine();
+
+                    Contact newContact = new Contact(firstName, lastName, phoneNumber, email);
+                    cm.addContact(newContact);
+                    
+                case 2:
+                    // Search Contact
+                    System.out.print("Enter a name, phone, or email to search: ");
+                    String searchKeyword = sc.nextLine();
+                    Contact found = cm.searchContact(searchKeyword);
+                    
+                    if (found != null) {
+                        System.out.println("Contact Found: " + found.getFirstName() + " " + found.getLastName() + 
+                                           " | Phone: " + found.getPhoneNumber() + " | Email: " + found.getEmail());
+                    } else {
+                        System.out.println("No contact found matching that keyword.");
+                    }
+                    break;
+                    
+        
+        }
+        
     }}
+}
