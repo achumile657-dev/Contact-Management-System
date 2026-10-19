@@ -43,7 +43,6 @@ public class Main {
    String email = sc.nextLine();
    
    Contact contact = new Contact(firstName,lastName,phoneNumber, email);
-   
     cm.addContact(contact);
     
     fileHandler.writeFile(firstName, lastName,phoneNumber, email);
