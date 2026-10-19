@@ -43,6 +43,7 @@ public class Main {
    String email = sc.nextLine();
    
    Contact contact = new Contact(firstName,lastName,phoneNumber, email);
+   
     cm.addContact(contact);
     
     fileHandler.writeFile(firstName, lastName,phoneNumber, email);
@@ -56,7 +57,7 @@ public class Main {
         System.out.println("2. Search Contact");
         System.out.println("3. Edit Contact");
         System.out.println("4. Delete Contact");
-            
+        
         System.out.print("Choose an option: ");
         
         int option = sc.nextInt();
