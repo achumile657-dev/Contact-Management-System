@@ -26,7 +26,7 @@ public class Main {
     
     System.out.println("CONTACT MANAGEMENT SYSTEM \n");
    
-    System.out.println("Cntact list empty!! Add your first contact!!");
+    System.out.println("Contact list empty!! Add your first contact!!");
     
     System.out.print("Enter first name: ");
    String firstName = sc.nextLine();
@@ -56,10 +56,19 @@ public class Main {
         System.out.println("2. Search Contact");
         System.out.println("3. Edit Contact");
         System.out.println("4. Delete Contact");
+        System.out.println("5. Exit App");
         
         System.out.print("Choose an option: ");
         
-        int option = sc.nextInt();
+        int option;
+        
+        try {
+                option = Integer.parseInt(sc.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 5!");
+                continue;
+            }
+        
         
         switch (option) {
                 case 1:
@@ -76,6 +85,11 @@ public class Main {
                     Contact newContact = new Contact(firstName, lastName, phoneNumber, email);
                     cm.addContact(newContact);
                     
+                    fileHandler.writeFile(firstName, lastName, phoneNumber, email);
+                    System.out.println("Contact added successfully!");
+                    
+                    break;
+                    
                 case 2:
                     // Search Contact
                     System.out.print("Enter a name, phone, or email to search: ");
@@ -84,15 +98,64 @@ public class Main {
                     
                     if (found != null) {
                         System.out.println("Contact Found: " + found.getFirstName() + " " + found.getLastName() + 
-                                           " | Phone: " + found.getPhoneNumber() + " | Email: " + found.getEmail());
+                                           " Phone: " + found.getPhoneNumber() + " Email: " + found.getEmail());
                     } else {
-                        System.out.println("No contact found matching that keyword.");
+                        System.out.println("No contact found matching the keyword.");
                     }
                     
                     break;
                     
+                case 3:
+                    // Edit Contact
+                    System.out.print("Enter the keyword of the contact you want to edit: ");
+                    String editKeyword = sc.nextLine();
+                    
+                
+                    if (cm.searchContact(editKeyword) == null) {
+                        System.out.println("Contact not found.");
+                        break;
+                    }
+                    
+                     System.out.print("Enter New First Name: ");
+                    String newFirst = sc.nextLine();
+                    System.out.print("Enter New Last Name: ");
+                    String newLast = sc.nextLine();
+                    System.out.print("Enter New Phone Number: ");
+                    String newPhone = sc.nextLine();
+                    System.out.print("Enter New Email: ");
+                    String newEmail = sc.nextLine();
+
+                    if (cm.editContact(editKeyword, newFirst, newLast, newPhone, newEmail)) {
+                        System.out.println("Contact updated successfully!");
+                    }
+                    break;
+                    
+                 case 4:
+                    // Delete Contact
+                    System.out.print("Enter the keyword of the contact you want to delete: ");
+                    String deleteKeyword = sc.nextLine();
+                    
+                    if (cm.deleteContact(deleteKeyword)) {
+                        System.out.println("Contact deleted successfully!");
+                    } else {
+                        System.out.println("Contact not found.");
+                    }
+                    break;
+                    
+                 case 5:
+                    // Exiting
+                    System.out.println("Thank you for using Contact Manager!");
+                    running = false;
+                    break;
+                    
+                    default:
+                    System.out.println("Invalid option. Please enter a number between 1 and 5.");
+ 
+                    
         
         }
         
-    }}
+    }
+        sc.close();
+    }
 }
