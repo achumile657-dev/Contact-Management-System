@@ -32,7 +32,7 @@ public class Main {
     
     ContactManager cm = new ContactManager();
     
-    System.out.println("===========CONTACT MANAGEMENT SYSTEM================");
+    System.out.println("---------------CONTACT MANAGEMENT SYSTEM--------------------");
    
     System.out.println("Contact list empty! Add your first contact!");
     
@@ -203,7 +203,7 @@ do {
                     
                  case 5:
                     // Exiting
-                    System.out.println("\n================FINAL CONTACT LIST===================");
+                    System.out.println("\n=========================FINAL CONTACT LIST===================");
                     
                     if(cm.isEmpty()){
                      System.out.println("Empty contact list.");
