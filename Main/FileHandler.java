@@ -1,4 +1,3 @@
-
 package main;
 
 import java.io.BufferedReader;
@@ -18,16 +17,13 @@ public class FileHandler {
         this.filePath = filePath;
     }
 
-    // Save all contacts to the CSV file
+    // Save all contacts to a file
     public void saveContacts(List<Contact> contacts) {
-
         try (BufferedWriter writer =
                  new BufferedWriter(new FileWriter(filePath))) {
 
             for (Contact contact : contacts) {
-
                 writer.write(
-                    contact.getId() + "," +
                     contact.getFirstName() + "," +
                     contact.getLastName() + "," +
                     contact.getPhoneNumber() + "," +
@@ -40,14 +36,14 @@ public class FileHandler {
             System.out.println("Contacts saved successfully.");
 
         } catch (IOException e) {
-            System.out.println("Error saving contacts: "
-                    + e.getMessage());
+            System.out.println(
+                "Error saving contacts: " + e.getMessage()
+            );
         }
     }
 
-    // Load contacts from the CSV file
+    // Load contacts from a file
     public List<Contact> loadContacts() {
-
         List<Contact> contacts = new ArrayList<>();
 
         try (BufferedReader reader =
@@ -56,44 +52,35 @@ public class FileHandler {
             String line;
 
             while ((line = reader.readLine()) != null) {
-
                 String[] data = line.split(",", -1);
 
-                if (data.length != 5) {
+                // Check that the record has four fields
+                if (data.length != 4) {
                     System.out.println("Invalid contact record.");
                     continue;
                 }
 
-                try {
-                    int id = Integer.parseInt(data[0]);
+                Contact contact = new Contact(
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3]
+                );
 
-                    Contact contact = new Contact(
-                        id,
-                        data[1],
-                        data[2],
-                        data[3],
-                        data[4]
-                    );
-
-                    contacts.add(contact);
-
-                } catch (NumberFormatException e) {
-                    System.out.println(
-                        "Invalid contact ID: " + data[0]);
-                }
+                contacts.add(contact);
             }
 
         } catch (IOException e) {
-            System.out.println("Error loading contacts: "
-                    + e.getMessage());
+            System.out.println(
+                "Error loading contacts: " + e.getMessage()
+            );
         }
 
         return contacts;
     }
 
-    // Record application actions in a separate log file
+    // Log an action to a separate file
     public void logAction(String action) {
-
         try (BufferedWriter writer =
                  new BufferedWriter(
                      new FileWriter("ContactLog.txt", true))) {
@@ -102,8 +89,9 @@ public class FileHandler {
             writer.newLine();
 
         } catch (IOException e) {
-            System.out.println("Error logging action: "
-                    + e.getMessage());
+            System.out.println(
+                "Error logging action: " + e.getMessage()
+            );
         }
     }
 }
