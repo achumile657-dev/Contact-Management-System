@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FileHandler {
 
-    private String filePath;
+    private final String filePath;
 
     // Constructor
     public FileHandler(String filePath) {

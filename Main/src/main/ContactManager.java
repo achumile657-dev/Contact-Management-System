@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ContactManager {
     
     
-    private List<Contact> contacts = new ArrayList<>();
+    private final List<Contact> contacts = new ArrayList<>();
     
      public void addContact(Contact contact) {
      contacts.add(contact);
@@ -75,5 +75,4 @@ public class ContactManager {
     }
     
     
-    public void getAllContact(){}
 }

@@ -28,8 +28,7 @@ public class Main {
         // TODO code application logic here
         Scanner sc = new Scanner(System.in);
     
-    FileHandler fileHandler =
-        new FileHandler("Contacts.csv");
+    FileHandler fileHandler = new FileHandler("Contacts.csv");
     
     ContactManager cm = new ContactManager();
     
@@ -98,7 +97,7 @@ do {
         
         
         switch (option) {
-                case 1:
+                case 1 -> {
                     // Add Contact
                     System.out.print("Enter First Name: ");
                     firstName = sc.nextLine();
@@ -116,7 +115,7 @@ do {
                     } while (!isValidPhoneNumber(phoneNumber));
                     
                     //Validate email
-                     do {
+                    do {
                         System.out.print("Enter Email: ");
                         email = sc.nextLine();
 
@@ -133,24 +132,23 @@ do {
                     
                     fileHandler.saveContacts(cm.getAllContacts());
                     System.out.println("Contact added successfully!");
-                    break;
+                }
                     
-                     case 2:
-                    // Search Contact
-                    System.out.print("Enter a name, phone number, or an email to search: ");
-                    String searchKeyword = sc.nextLine();
-                    Contact found = cm.searchContact(searchKeyword);
+                     case 2 -> {
+                         // Search Contact
+                         System.out.print("Enter a name, phone number, or an email to search: ");
+                         String searchKeyword = sc.nextLine();
+                         Contact found = cm.searchContact(searchKeyword);
+                         
+                         if (found != null) {
+                             System.out.println("Contact Found: " + found.getFirstName() + " " + found.getLastName() +
+                                     " Phone number: " + found.getPhoneNumber() + " Email: " + found.getEmail());
+                         } else {
+                             System.out.println("No contact found matching the keyword.");
+                         }
+                }
                     
-                    if (found != null) {
-                        System.out.println("Contact Found: " + found.getFirstName() + " " + found.getLastName() + 
-                                           " Phone number: " + found.getPhoneNumber() + " Email: " + found.getEmail());
-                    } else {
-                        System.out.println("No contact found matching the keyword.");
-                    }
-                    
-                    break;
-                    
-                case 3:
+                case 3 -> {
                     // Edit Contact
                     System.out.print("Enter the keyword of the contact you want to edit: ");
                     String editKeyword = sc.nextLine();
@@ -168,65 +166,63 @@ do {
                     
                     String newPhoneNumber;
                     do{
-                    System.out.println("Enter New phone number:");
-                    newPhoneNumber=sc.nextLine();
-                    if(!isValidPhoneNumber(newPhoneNumber)){
-                    System.out.println("Invalid South African phone number.");
-                   }
-                    
+                        System.out.println("Enter New phone number:");
+                        newPhoneNumber=sc.nextLine();
+                        if(!isValidPhoneNumber(newPhoneNumber)){
+                            System.out.println("Invalid South African phone number.");
+                        }
+                        
                     }while(!isValidPhoneNumber(newPhoneNumber));
-         
+                    
                     
                     String newEmail;
                     do{
-                    System.out.println("Enter New Email:");
-                    newEmail=sc.nextLine();
-                    if(!isValidEmail(newEmail)){
-                    System.out.println("Invalid email address.");
-                   }
+                        System.out.println("Enter New Email:");
+                        newEmail=sc.nextLine();
+                        if(!isValidEmail(newEmail)){
+                            System.out.println("Invalid email address.");
+                        }
                     }while(!isValidEmail(newEmail));
 
                     if (cm.editContact(editKeyword, newFirst, newLast, newPhoneNumber, newEmail)) {
                         System.out.println("Contact updated successfully!");
                     }
-                    break;
+                }
                     
-                 case 4:
-                    // Delete Contact
-                    System.out.print("Enter the keyword of the contact you want to delete: ");
-                    String deleteKeyword = sc.nextLine();
+                 case 4 -> {
+                     // Delete Contact
+                     System.out.print("Enter the keyword of the contact you want to delete: ");
+                     String deleteKeyword = sc.nextLine();
+                     
+                     if (cm.deleteContact(deleteKeyword)) {
+                         System.out.println("Contact deleted successfully!");
+                     } else {
+                         System.out.println("Contact not found.");
+                     }
+                }
                     
-                    if (cm.deleteContact(deleteKeyword)) {
-                        System.out.println("Contact deleted successfully!");
+                 case 5 -> {
+                     // Exiting
+                     System.out.println("\n=========================FINAL CONTACT LIST===================");
+                    if (cm.isEmpty()) {
+                        System.out.println("Empty contact list.");
                     } else {
-                        System.out.println("Contact not found.");
+                        int count= 1;
+                        
+                        for(Contact c : cm.getAllContacts()){
+                            System.out.println("\nContact: "+count);
+                            System.out.println("First name: "+c.getFirstName());
+                            System.out.println("Last name: "+c.getLastName());
+                            System.out.println("Phone number: "+c.getPhoneNumber());
+                            System.out.println("Email: "+c.getEmail());
+                            
+                            count++;
+                        }
+                        System.out.println("\n================GOOD BYE!===================");
+                        System.out.println("Thank you for using Contact Manager!");
+                        running = false;
                     }
-                    break;
-                    
-                 case 5:
-                    // Exiting
-                    System.out.println("\n=========================FINAL CONTACT LIST===================");
-                    
-                    if(cm.isEmpty()){
-                     System.out.println("Empty contact list.");
-                    }
-                    else{
-                    int count= 1;
-                    
-              for(Contact c : cm.getAllContacts()){
-              System.out.println("\nContact: "+count);
-              System.out.println("First name: "+c.getFirstName());
-              System.out.println("Last name: "+c.getLastName());
-              System.out.println("Phone number: "+c.getPhoneNumber());
-              System.out.println("Email: "+c.getEmail());
-                    
-                    count++;
-                    }
-              System.out.println("\n================GOOD BYE!===================");
-              System.out.println("Thank you for using Contact Manager!");
-                    running = false;
-                    break;
-         }
+                }
         
     }
         sc.close();
