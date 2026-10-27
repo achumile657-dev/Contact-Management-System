@@ -225,7 +225,8 @@ do {
                 }
         
     }
-        sc.close();
+      
     }
+        sc.close();
     }
 }
