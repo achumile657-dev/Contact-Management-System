@@ -80,7 +80,7 @@ do {
         while (running) {
         System.out.println("1. Add Contact");
         System.out.println("2. Search Contact");
-        System.out.println("3. Edit Contact");
+        System.out.println("3. View and Edit Contact");
         System.out.println("4. Delete Contact");
         System.out.println("5. Exit App");
         
@@ -149,13 +149,20 @@ do {
                 }
                     
                 case 3 -> {
+                     
+                    
+
                     // Edit Contact
+                    System.out.println("Contact list: ");
+                    cm.viewContact();
+                    
                     System.out.print("Enter the keyword of the contact you want to edit: ");
                     String editKeyword = sc.nextLine();
                     
                 
                     if (cm.searchContact(editKeyword) == null) {
                         System.out.println("Contact not found.");
+                        
                         break;
                     }
                     
@@ -225,8 +232,8 @@ do {
                 }
         
     }
-      
+     
     }
-        sc.close();
+           sc.close();
     }
 }
