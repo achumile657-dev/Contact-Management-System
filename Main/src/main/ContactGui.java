@@ -10,6 +10,10 @@ package main;
  * @author USER
  */
 public class ContactGui extends javax.swing.JFrame {
+        private FileHandler fileHandler;
+
+        private java.util.List<Contact> contacts =
+        new java.util.ArrayList<>();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ContactGui.class.getName());
 
@@ -17,8 +21,21 @@ public class ContactGui extends javax.swing.JFrame {
      * Creates new form ContactGui
      */
     public ContactGui() {
-        initComponents();
-    }
+
+    initComponents();
+
+    // Connect to FileHandler
+    fileHandler = new FileHandler("contacts.txt");
+
+    // Load contacts from the file
+    contacts = fileHandler.loadContacts();
+
+    // Display the contacts in the table
+    refreshTable();
+        
+    // Connect the Delete button
+    delBtn.addActionListener(e -> handleDeleteButton());
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -167,7 +184,77 @@ public class ContactGui extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ContactGui().setVisible(true));
     }
+    public void refreshTable() {
 
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+    // Remove existing rows
+         model.setRowCount(0);
+
+    // Add contacts from the list
+        for (Contact contact : contacts) {
+
+        model.addRow(new Object[]{
+            contact.getFirstName(),
+            contact.getLastName(),
+            contact.getEmail(),
+            contact.getPhoneNumber()
+        });
+    }
+}
+    public void handleDeleteButton() {
+
+    // Get the selected row
+    int selectedRow = jTable1.getSelectedRow();
+
+    // Check whether a row was selected
+    if (selectedRow == -1) {
+
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Please select a contact to delete."
+        );
+
+        return;
+    }
+
+    // Confirm deletion
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to delete this contact?",
+            "Confirm Delete",
+            javax.swing.JOptionPane.YES_NO_OPTION
+    );
+
+    // Continue only if the user clicks YES
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+
+        // Get the contact before removing it
+        Contact deletedContact = contacts.get(selectedRow);
+
+        // Remove the contact from the list
+        contacts.remove(selectedRow);
+
+        // Save the updated list to the file
+        fileHandler.saveContacts(contacts);
+
+        // Record the deletion
+        fileHandler.logAction(
+                "Deleted contact: "
+                + deletedContact.getFirstName() + " "
+                + deletedContact.getLastName()
+        );
+
+        // Refresh the table
+        refreshTable();
+
+        // Inform the user
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Contact deleted successfully."
+        );
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton delBtn;
