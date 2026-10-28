@@ -21,9 +21,7 @@ public class Main {
     public static boolean isValidEmail(String email) {
     return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 }
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner sc = new Scanner(System.in);
@@ -154,7 +152,7 @@ do {
 
                     // Edit Contact
                     System.out.println("Contact list: ");
-                    cm.viewContact();
+                   // cm.viewContact();
                     
                     System.out.print("Enter the keyword of the contact you want to edit: ");
                     String editKeyword = sc.nextLine();
