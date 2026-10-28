@@ -11,6 +11,7 @@ package main;
  */
 public class ContactGui extends javax.swing.JFrame {
         private FileHandler fileHandler;
+        private ContactManager contactManager;
 
         private java.util.List<Contact> contacts =
         new java.util.ArrayList<>();
@@ -25,7 +26,16 @@ public class ContactGui extends javax.swing.JFrame {
     initComponents();
 
     // Connect to FileHandler
-    fileHandler = new FileHandler("contacts.txt");
+    fileHandler = new FileHandler("Contacts.csv");
+    contactManager = new ContactManager();
+    
+    // Load existing contacts from file directly into the ContactManager
+        java.util.List<Contact> loadedContacts = fileHandler.loadContacts();
+        if (loadedContacts != null) {
+            for (Contact c : loadedContacts) {
+                contactManager.addContact(c);
+            }
+        }
 
     // Load contacts from the file
     contacts = fileHandler.loadContacts();
@@ -35,6 +45,7 @@ public class ContactGui extends javax.swing.JFrame {
         
     // Connect the Delete button
     delBtn.addActionListener(e -> handleDeleteButton());
+    addBtn.addActionListener(e -> handleAddButton());
 }
 
     /**
@@ -184,6 +195,32 @@ public class ContactGui extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ContactGui().setVisible(true));
     }
+    
+    public void handleAddButton() {
+        String firstName = javax.swing.JOptionPane.showInputDialog(this, "Enter First Name:");
+        if (firstName == null || firstName.trim().isEmpty()) return;
+        
+        String lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
+        if (lastName == null || lastName.trim().isEmpty()) return;
+        
+        String email = javax.swing.JOptionPane.showInputDialog(this, "Enter Email:");
+        if (email == null || email.trim().isEmpty()) return;
+        
+        String phone = javax.swing.JOptionPane.showInputDialog(this, "Enter Phone Number:");
+        if (phone == null || phone.trim().isEmpty()) return;
+
+        // Use ContactManager to add
+        Contact newContact = new Contact(firstName.trim(), lastName.trim(), phone.trim(), email.trim());
+        contactManager.addContact(newContact);
+
+        // Save updated list to file
+        fileHandler.saveContacts(contactManager.getAllContacts());
+        fileHandler.logAction("Added contact: " + firstName + " " + lastName);
+
+        refreshTable();
+        javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
+    }
+    
     public void refreshTable() {
 
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();

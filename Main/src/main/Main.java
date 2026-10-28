@@ -154,7 +154,7 @@ do {
 
                     // Edit Contact
                     System.out.println("Contact list: ");
-                    cm.viewContact();
+                    //cm.viewContact();
                     
                     System.out.print("Enter the keyword of the contact you want to edit: ");
                     String editKeyword = sc.nextLine();
