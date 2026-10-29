@@ -46,6 +46,9 @@ public class ContactGui extends javax.swing.JFrame {
     // Connect the Delete button
     delBtn.addActionListener(e -> handleDeleteButton());
     addBtn.addActionListener(e -> handleAddButton());
+    editBtn.addActionListener(e -> handleEditButton());
+    searchButton.addActionListener(e -> handleSearchButton());
+    searchBar.addActionListener(e -> handleSearchButton());
 }
 
     /**
@@ -126,9 +129,9 @@ public class ContactGui extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchButton))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
@@ -206,6 +209,7 @@ public class ContactGui extends javax.swing.JFrame {
         fileHandler.saveContacts(contactManager.getAllContacts());
         fileHandler.logAction("Added contact: " + firstName + " " + lastName);
 
+        contacts = fileHandler.loadContacts(); // Reload the fresh list from the file/manager
         refreshTable();
         javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
     }
@@ -281,6 +285,71 @@ public class ContactGui extends javax.swing.JFrame {
         );
     }
 }
+    public void handleEditButton() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a contact to edit.");
+            return;
+        }
+
+        Contact contact = contacts.get(selectedRow);
+
+        // Show input dialogs pre-filled with existing values
+        String firstName = javax.swing.JOptionPane.showInputDialog(this, "Edit First Name:", contact.getFirstName());
+        if (firstName == null || firstName.trim().isEmpty()) return;
+
+        String lastName = javax.swing.JOptionPane.showInputDialog(this, "Edit Last Name:", contact.getLastName());
+        if (lastName == null || lastName.trim().isEmpty()) return;
+
+        String email = javax.swing.JOptionPane.showInputDialog(this, "Edit Email:", contact.getEmail());
+        if (email == null || email.trim().isEmpty()) return;
+
+        String phone = javax.swing.JOptionPane.showInputDialog(this, "Edit Phone Number:", contact.getPhoneNumber());
+        if (phone == null || phone.trim().isEmpty()) return;
+
+        // Update contact object (if your Contact class has setter methods, you can call those instead)
+        // This creates a replacement object in the list
+        Contact updatedContact = new Contact(firstName.trim(), lastName.trim(), phone.trim(), email.trim());
+        contacts.set(selectedRow, updatedContact);
+
+        // Save changes to file and log
+        fileHandler.saveContacts(contacts);
+        fileHandler.logAction("Edited contact: " + firstName + " " + lastName);
+
+        refreshTable();
+        javax.swing.JOptionPane.showMessageDialog(this, "Contact updated successfully!");
+    }
+
+    public void handleSearchButton() {
+        String query = searchBar.getText().trim().toLowerCase();
+        if (query.isEmpty()) {
+            // If search is empty, reload all contacts from file
+            contacts = fileHandler.loadContacts();
+            refreshTable();
+            return;
+        }
+
+        // Filter the table rows based on what matches the search bar
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        for (Contact contact : contacts) {
+            boolean match = (contact.getFirstName() != null && contact.getFirstName().toLowerCase().contains(query)) ||
+                            (contact.getLastName() != null && contact.getLastName().toLowerCase().contains(query)) ||
+                            (contact.getEmail() != null && contact.getEmail().toLowerCase().contains(query)) ||
+                            (String.valueOf(contact.getPhoneNumber()).toLowerCase().contains(query));
+
+            if (match) {
+                model.addRow(new Object[]{
+                    contact.getFirstName(),
+                    contact.getLastName(),
+                    contact.getEmail(),
+                    contact.getPhoneNumber()
+                });
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton delBtn;
