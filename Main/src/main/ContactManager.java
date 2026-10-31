@@ -56,10 +56,9 @@ public class ContactManager {
  switch(fieldChoice){
  
      case 1-> contact.setFirstName(newValue);
-     case 2-> contact.setFirstName(newValue);
-     case 3->contact.setFirstName(newValue);
-     case 4->contact.setPhoneNumber(newValue);
-     case 5->contact.setEmail(newValue);
+     case 2-> contact.setLastName(newValue);
+     case 3->contact.setPhoneNumber(newValue);
+     case 4->contact.setEmail(newValue);
  default->{
  return false; //invalid field choice
  }
