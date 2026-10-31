@@ -29,6 +29,9 @@ public class Main {
     FileHandler fileHandler = new FileHandler("Contacts.csv");
     
     ContactManager cm = new ContactManager();
+    ContactGui gui = new ContactGui();
+    gui.setVisible(true);
+    
     
     System.out.println("---------------CONTACT MANAGEMENT SYSTEM--------------------");
    

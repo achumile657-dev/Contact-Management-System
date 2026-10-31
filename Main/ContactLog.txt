@@ -7,3 +7,9 @@ Added contact: Vusi Sibanyoni
 Added contact: testing adding
 Edited contact: testing editing
 Added contact: testing2 user
+Added contact: Vusitesting Sib
+Deleted contact: Vusitesting Sib
+Deleted contact: abc def
+Deleted contact: Sikhanyiso Makisi
+Added contact: testing3 Lastname
+Deleted contact: abc def
