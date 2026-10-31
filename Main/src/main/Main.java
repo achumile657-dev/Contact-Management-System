@@ -154,7 +154,7 @@ do {
                     
 
                     // Edit Contact
-                    System.out.println("Contact list: ");
+                   // System.out.println("Contact list: ");
                    // cm.viewContact();
                     //cm.viewContact();
 
@@ -165,37 +165,57 @@ do {
                 
                     if (cm.searchContact(editKeyword) == null) {
                         System.out.println("Contact not found.");
-                        
                         break;
                     }
                     
-                    System.out.print("Enter New First Name: ");
-                    String newFirst = sc.nextLine();
-                    System.out.print("Enter New Last Name: ");
-                    String newLast = sc.nextLine();
+                    System.out.println("Choose field to edit: ");
+                    System.out.println("1.First Name");
+                    System.out.println("2.Last Name");
+                    System.out.println("3.Phone Number");
+                    System.out.println("4.Email ");
+                    System.out.print("Choose from (1-4):");
                     
-                    String newPhoneNumber;
-                    do{
-                        System.out.println("Enter New phone number:");
-                        newPhoneNumber=sc.nextLine();
-                        if(!isValidPhoneNumber(newPhoneNumber)){
-                            System.out.println("Invalid South African phone number.");
+                     String choiceText = sc.nextLine().trim();
+                     if (!choiceText.matches("[1-4]")) {
+                    System.out.println("Invalid choice. Please enter a number from 1 to 4.");
+                    break;
+                       }
+                     
+                 int fieldChoice = Integer.parseInt(choiceText);
+                 String newValue;
+                 
+               switch(fieldChoice){
+ 
+               case 1->System.out.println("Enter new first name:");
+               case 2-> System.out.println("Enter new last name:");
+               case 3->System.out.println("Enter new phone number:");
+               case 4->System.out.println("Enter new email:");
+   }
+            newValue = sc.nextLine().trim();
+                    
+                    if(fieldChoice == 3){
+                        while(!isValidPhoneNumber(newValue)){
+                        System.out.print("Enter New phone number:");
+                        newValue=sc.nextLine().trim();
+                      System.out.println("Invalid South African phone number.");
                         }
                         
-                    }while(!isValidPhoneNumber(newPhoneNumber));
-                    
-                    
-                    String newEmail;
-                    do{
-                        System.out.println("Enter New Email:");
-                        newEmail=sc.nextLine();
-                        if(!isValidEmail(newEmail)){
-                            System.out.println("Invalid email address.");
+                    }
+                        
+                 
+                else if(fieldChoice == 4){
+              while(!isValidEmail(newValue)){
+                        System.out.print("Enter New Email:");
+                        newValue=sc.nextLine().trim();
+                        System.out.println("Invalid email address.");
                         }
-                    }while(!isValidEmail(newEmail));
-
-                    if (cm.editContact(editKeyword, newFirst, newLast, newPhoneNumber, newEmail)) {
+                    }
+        
+       if (cm.editContact(editKeyword, fieldChoice, newValue)) {
+                        fileHandler.saveContacts(cm.getAllContacts());
                         System.out.println("Contact updated successfully!");
+                    } else {
+                        System.out.println("Contact could not be updated.");
                     }
                 }
                     
@@ -236,7 +256,7 @@ do {
         
     }
      
-    }
-           sc.close();
+    } 
+         sc.close();
     }
 }
