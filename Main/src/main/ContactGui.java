@@ -189,11 +189,38 @@ public class ContactGui extends javax.swing.JFrame {
     }
     
     public void handleAddButton() {
-        String firstName = javax.swing.JOptionPane.showInputDialog(this, "Enter First Name:");
-        if (firstName == null || firstName.trim().isEmpty()) return;
+        // Validate First Name (Compulsory)
+    String firstName;
+    while (true) {
+        firstName = javax.swing.JOptionPane.showInputDialog(this, "Enter First Name:");
+        if (firstName == null) return; // User clicked Cancel
+        firstName = firstName.trim();
         
-        String lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
-        if (lastName == null || lastName.trim().isEmpty()) return;
+        if (!firstName.isEmpty()) {
+            break; // Valid, exit loop
+        }
+        javax.swing.JOptionPane.showMessageDialog(this, 
+            "First name cannot be blank. Please enter a valid first name.", 
+            "Validation Error", 
+            javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+    
+    // Validate Last Name (Compulsory)
+    String lastName;
+    while (true) {
+        lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
+        if (lastName == null) return; // User clicked Cancel
+        lastName = lastName.trim();
+        
+        if (!lastName.isEmpty()) {
+            break; // Valid, exit loop
+        }
+        javax.swing.JOptionPane.showMessageDialog(this, 
+            "Last name cannot be blank. Please enter a valid last name.", 
+            "Validation Error", 
+            javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+        
         
         // Validate Email using Main.java logic
         String email;
