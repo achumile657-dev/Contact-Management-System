@@ -173,7 +173,7 @@ do {
                     
                     String newPhoneNumber;
                     do{
-                        System.out.println("Enter New phone number:");
+                        System.out.print("Enter New phone number:");
                         newPhoneNumber=sc.nextLine();
                         if(!isValidPhoneNumber(newPhoneNumber)){
                             System.out.println("Invalid South African phone number.");
@@ -184,7 +184,7 @@ do {
                     
                     String newEmail;
                     do{
-                        System.out.println("Enter New Email:");
+                        System.out.print("Enter New Email:");
                         newEmail=sc.nextLine();
                         if(!isValidEmail(newEmail)){
                             System.out.println("Invalid email address.");
