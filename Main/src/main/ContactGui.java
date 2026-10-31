@@ -195,21 +195,39 @@ public class ContactGui extends javax.swing.JFrame {
         String lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
         if (lastName == null || lastName.trim().isEmpty()) return;
         
-        String email = javax.swing.JOptionPane.showInputDialog(this, "Enter Email:");
-        if (email == null || email.trim().isEmpty()) return;
+        // Validate Email using Main.java logic
+        String email;
+        while (true) {
+            email = javax.swing.JOptionPane.showInputDialog(this, "Enter Email:");
+            if (email == null) return;
+            email = email.trim();
+            if (Main.isValidEmail(email)) {
+                break;
+            }
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid email address format.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
         
-        String phone = javax.swing.JOptionPane.showInputDialog(this, "Enter Phone Number:");
-        if (phone == null || phone.trim().isEmpty()) return;
+        // Validate Phone Number using Main.java logic
+        String phone;
+        while (true) {
+            phone = javax.swing.JOptionPane.showInputDialog(this, "Enter Phone Number (e.g., 0821234567):");
+            if (phone == null) return;
+            phone = phone.trim();
+            if (Main.isValidPhoneNumber(phone)) {
+                break;
+            }
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid South African phone number. Must start with 06, 07, or 08 and be 10 digits total.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
 
         // Use ContactManager to add
-        Contact newContact = new Contact(firstName.trim(), lastName.trim(), phone.trim(), email.trim());
+        Contact newContact = new Contact(firstName.trim(), lastName.trim(), phone, email);
         contactManager.addContact(newContact);
 
         // Save updated list to file
         fileHandler.saveContacts(contactManager.getAllContacts());
         fileHandler.logAction("Added contact: " + firstName + " " + lastName);
 
-        contacts = fileHandler.loadContacts(); // Reload the fresh list from the file/manager
+        contacts = fileHandler.loadContacts();
         refreshTable();
         javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
     }

@@ -4,7 +4,6 @@ Added contact: abc def
 Added contact: Sikhanyiso Makisi
 Added contact: abc def
 Added contact: Vusi Sibanyoni
-Added contact: Somila Gole
-Deleted contact: abc def
-Added contact: Somila Gole
-Deleted contact: Somila Gole
+Added contact: testing adding
+Edited contact: testing editing
+Added contact: testing2 user
