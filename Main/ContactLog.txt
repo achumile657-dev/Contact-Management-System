@@ -13,3 +13,4 @@ Deleted contact: abc def
 Deleted contact: Sikhanyiso Makisi
 Added contact: testing3 Lastname
 Deleted contact: abc def
+Edited contact: Sikhanyiso Makisi
