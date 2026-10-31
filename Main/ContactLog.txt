@@ -9,3 +9,5 @@ Edited contact: testing editing
 Added contact: testing2 user
 Added contact: 345 nasy
 Edited contact: 345 nasy
+Added contact: abc cde
+Added contact: abc123 rtq2

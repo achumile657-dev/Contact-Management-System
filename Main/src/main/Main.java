@@ -17,6 +17,10 @@ public class Main {
    public static boolean isValidPhoneNumber(String phoneNumber) {
     return phoneNumber.matches("0[6-8][0-9]{8}");
 }
+   public static boolean isValidName(String name) {
+    return name != null && name.matches("^(?=.*[A-Za-z])[A-Za-z0-9\\s'-]+$");
+}
+   
    //Email validation
     public static boolean isValidEmail(String email) {
     return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");

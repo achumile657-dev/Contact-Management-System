@@ -42,6 +42,7 @@ public class ContactGui extends javax.swing.JFrame {
 
     // Display the contacts in the table
     refreshTable();
+    
         
     // Connect the Delete button
     delBtn.addActionListener(e -> handleDeleteButton());
@@ -49,6 +50,9 @@ public class ContactGui extends javax.swing.JFrame {
     editBtn.addActionListener(e -> handleEditButton());
     searchButton.addActionListener(e -> handleSearchButton());
     searchBar.addActionListener(e -> handleSearchButton());
+    
+    refreshBtn.setText("SHOW ALL");
+    refreshBtn.addActionListener(e -> handleRefreshButton());
 }
 
     /**
@@ -68,6 +72,7 @@ public class ContactGui extends javax.swing.JFrame {
         addBtn = new javax.swing.JButton();
         delBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,6 +108,8 @@ public class ContactGui extends javax.swing.JFrame {
 
         editBtn.setText("EDIT");
 
+        refreshBtn.setText("REFRESH");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,17 +119,23 @@ public class ContactGui extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(searchButton)))
-                .addContainerGap(38, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(addBtn)
-                .addGap(160, 160, 160)
-                .addComponent(delBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
-                .addComponent(editBtn)
+                        .addComponent(searchButton)
+                        .addGap(121, 121, 121)))
+                .addContainerGap(35, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(addBtn)
+                        .addGap(160, 160, 160)
+                        .addComponent(delBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
+                        .addComponent(editBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refreshBtn)))
                 .addGap(65, 65, 65))
         );
         jPanel1Layout.setVerticalGroup(
@@ -131,7 +144,8 @@ public class ContactGui extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchButton)
-                    .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshBtn))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
@@ -196,27 +210,27 @@ public class ContactGui extends javax.swing.JFrame {
         if (firstName == null) return; // User clicked Cancel
         firstName = firstName.trim();
         
-        if (!firstName.isEmpty()) {
+        if (Main.isValidName(firstName)) {
             break; // Valid, exit loop
         }
         javax.swing.JOptionPane.showMessageDialog(this, 
-            "First name cannot be blank. Please enter a valid first name.", 
+            "Invalid first name. Must contain at least letters (digits and spaces are allowed).", 
             "Validation Error", 
             javax.swing.JOptionPane.ERROR_MESSAGE);
     }
     
-    // Validate Last Name (Compulsory)
+   // Validate Last Name (Compulsory, text required, digits allowed)
     String lastName;
     while (true) {
         lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
         if (lastName == null) return; // User clicked Cancel
         lastName = lastName.trim();
         
-        if (!lastName.isEmpty()) {
+        if (Main.isValidName(lastName)) {
             break; // Valid, exit loop
         }
         javax.swing.JOptionPane.showMessageDialog(this, 
-            "Last name cannot be blank. Please enter a valid last name.", 
+            "Invalid last name. Must contain at least letters (digits and spaces are allowed).", 
             "Validation Error", 
             javax.swing.JOptionPane.ERROR_MESSAGE);
     }
@@ -277,6 +291,13 @@ public class ContactGui extends javax.swing.JFrame {
         });
     }
 }
+    
+    public void handleRefreshButton() {
+    searchBar.setText(""); // Clear the search bar text
+    contacts = fileHandler.loadContacts(); // Reload all contacts from file/storage
+    refreshTable(); // Redisplay the full list in the table
+}
+    
     public void handleDeleteButton() {
 
     // Get the selected row
@@ -402,6 +423,7 @@ public class ContactGui extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton refreshBtn;
     private javax.swing.JTextField searchBar;
     private javax.swing.JButton searchButton;
     // End of variables declaration//GEN-END:variables
