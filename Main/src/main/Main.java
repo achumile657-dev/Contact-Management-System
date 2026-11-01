@@ -146,55 +146,122 @@ do {
                          }
                 }
                     
-                case 3 -> {
                      
-                    
+                    case 3 -> {
 
-                    // Edit Contact
-                    System.out.println("Contact list: ");
-                   // cm.viewContact();
-                    //cm.viewContact();
+    System.out.print("Enter the keyword of the contact you want to edit: ");
+    String editKeyword = sc.nextLine();
 
-                    
-                    System.out.print("Enter the keyword of the contact you want to edit: ");
-                    String editKeyword = sc.nextLine();
-                    
-                
-                    if (cm.searchContact(editKeyword) == null) {
-                        System.out.println("Contact not found.");
-                        
-                        break;
-                    }
-                    
-                    System.out.print("Enter New First Name: ");
-                    String newFirst = sc.nextLine();
-                    System.out.print("Enter New Last Name: ");
-                    String newLast = sc.nextLine();
-                    
-                    String newPhoneNumber;
-                    do{
-                        System.out.println("Enter New phone number:");
-                        newPhoneNumber=sc.nextLine();
-                        if(!isValidPhoneNumber(newPhoneNumber)){
-                            System.out.println("Invalid South African phone number.");
-                        }
-                        
-                    }while(!isValidPhoneNumber(newPhoneNumber));
-                    
-                    
-                    String newEmail;
-                    do{
-                        System.out.println("Enter New Email:");
-                        newEmail=sc.nextLine();
-                        if(!isValidEmail(newEmail)){
-                            System.out.println("Invalid email address.");
-                        }
-                    }while(!isValidEmail(newEmail));
+    Contact found = cm.searchContact(editKeyword);
 
-                    if (cm.editContact(editKeyword, newFirst, newLast, newPhoneNumber, newEmail)) {
-                        System.out.println("Contact updated successfully!");
-                    }
+    if (found == null) {
+        System.out.println("Contact not found.");
+        break;
+    }
+
+    boolean editing = true;
+    boolean updated = false;
+
+    while (editing) {
+
+        System.out.println("\n========== EDIT CONTACT ==========");
+        System.out.println("Current contact details:");
+        System.out.println("1. First Name: " + found.getFirstName());
+        System.out.println("2. Last Name: " + found.getLastName());
+        System.out.println("3. Phone Number: " + found.getPhoneNumber());
+        System.out.println("4. Email: " + found.getEmail());
+        System.out.println("5. Finish Editing");
+
+        System.out.print("\nChoose the field you want to edit: ");
+
+        int editOption;
+
+        try {
+            editOption = Integer.parseInt(sc.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid number.");
+            continue;
+        }
+
+        switch (editOption) {
+
+            case 1 -> {
+                System.out.print("Enter new first name: ");
+                String newFirst = sc.nextLine().trim();
+
+                if (newFirst.isEmpty()) {
+                    System.out.println("First name cannot be empty.");
+                } else {
+                    found.setFirstName(newFirst);
+                    updated = true;
+                    System.out.println("First name updated!");
                 }
+            }
+
+            case 2 -> {
+                System.out.print("Enter new last name: ");
+                String newLast = sc.nextLine().trim();
+
+                if (newLast.isEmpty()) {
+                    System.out.println("Last name cannot be empty.");
+                } else {
+                    found.setLastName(newLast);
+                    updated = true;
+                    System.out.println("Last name updated!");
+                }
+            }
+
+            case 3 -> {
+                String newPhone;
+
+                do {
+                    System.out.print("Enter new phone number: ");
+                    newPhone = sc.nextLine().trim();
+
+                    if (!isValidPhoneNumber(newPhone)) {
+                        System.out.println("Invalid South African phone number.");
+                    }
+
+                } while (!isValidPhoneNumber(newPhone));
+
+                found.setPhoneNumber(newPhone);
+                updated = true;
+                System.out.println("Phone number updated!");
+            }
+
+            case 4 -> {
+                String newEmail;
+
+                do {
+                    System.out.print("Enter new email: ");
+                    newEmail = sc.nextLine().trim();
+
+                    if (!isValidEmail(newEmail)) {
+                        System.out.println("Invalid email address.");
+                    }
+
+                } while (!isValidEmail(newEmail));
+
+                found.setEmail(newEmail);
+                updated = true;
+                System.out.println("Email updated!");
+            }
+
+            case 5 -> {
+                editing = false;
+                System.out.println("Finished editing contact.");
+            }
+
+            default -> System.out.println("Invalid option. Choose 1-5.");
+        }
+    }
+
+    // Save changes to CSV
+    if (updated) {
+        fileHandler.saveContacts(cm.getAllContacts());
+        System.out.println("Contact changes saved successfully!");
+    }
+}
                     
                  case 4 -> {
                      // Delete Contact
