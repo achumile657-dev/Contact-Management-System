@@ -46,18 +46,25 @@ public class ContactManager {
       
          
     // edits the details of the contact 
-    public boolean editContact(String keyword, String newFirstName, String newLastName,
-                           String newPhoneNumber, String newEmail) {
-    Contact contact = searchContact(keyword);
+    public boolean editContact(String keyword,int fieldChoice, String newValue){
+   Contact contact = searchContact(keyword);
 
     if (contact == null) {
         return false;
     }
-
-    contact.setFirstName(newFirstName);
-    contact.setLastName(newLastName);
-    contact.setPhoneNumber(newPhoneNumber);
-    contact.setEmail(newEmail);
+       
+ switch(fieldChoice){
+ 
+     case 1-> contact.setFirstName(newValue);
+     case 2-> contact.setLastName(newValue);
+     case 3->contact.setPhoneNumber(newValue);
+     case 4->contact.setEmail(newValue);
+ default->{
+ return false; //invalid field choice
+ }
+ }
+    
+    
     return true;
      }
       

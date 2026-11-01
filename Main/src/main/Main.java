@@ -17,6 +17,10 @@ public class Main {
    public static boolean isValidPhoneNumber(String phoneNumber) {
     return phoneNumber.matches("0[6-8][0-9]{8}");
 }
+   public static boolean isValidName(String name) {
+    return name != null && name.matches("^(?=.*[A-Za-z])[A-Za-z0-9\\s'-]+$");
+}
+   
    //Email validation
     public static boolean isValidEmail(String email) {
     return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
@@ -29,6 +33,9 @@ public class Main {
     FileHandler fileHandler = new FileHandler("Contacts.csv");
     
     ContactManager cm = new ContactManager();
+    ContactGui gui = new ContactGui();
+    gui.setVisible(true);
+    
     
     System.out.println("---------------CONTACT MANAGEMENT SYSTEM--------------------");
    
@@ -195,6 +202,71 @@ do {
                     found.setFirstName(newFirst);
                     updated = true;
                     System.out.println("First name updated!");
+                    // Edit Contact
+                   // System.out.println("Contact list: ");
+                   // cm.viewContact();
+                    //cm.viewContact();
+
+                    
+                    System.out.print("Enter the keyword of the contact you want to edit: ");
+                   // String editKeyword = sc.nextLine();
+                    
+                
+                    if (cm.searchContact(editKeyword) == null) {
+                        System.out.println("Contact not found.");
+                        break;
+                    }
+                    
+                    System.out.println("Choose field to edit: ");
+                    System.out.println("1.First Name");
+                    System.out.println("2.Last Name");
+                    System.out.println("3.Phone Number");
+                    System.out.println("4.Email ");
+                    System.out.print("Choose from (1-4):");
+                    
+                     String choiceText = sc.nextLine().trim();
+                     if (!choiceText.matches("[1-4]")) {
+                    System.out.println("Invalid choice. Please enter a number from 1 to 4.");
+                    break;
+                       }
+                     
+                 int fieldChoice = Integer.parseInt(choiceText);
+                 String newValue;
+                 
+               switch(fieldChoice){
+ 
+               case 1->System.out.println("Enter new first name:");
+               case 2-> System.out.println("Enter new last name:");
+               case 3->System.out.println("Enter new phone number:");
+               case 4->System.out.println("Enter new email:");
+   }
+            newValue = sc.nextLine().trim();
+                    
+                    if(fieldChoice == 3){
+                        while(!isValidPhoneNumber(newValue)){
+                        System.out.print("Enter New phone number:");
+                        newValue=sc.nextLine().trim();
+                      System.out.println("Invalid South African phone number.");
+                        }
+                        
+                    }
+                        
+                 
+                else if(fieldChoice == 4){
+              while(!isValidEmail(newValue)){
+                        System.out.print("Enter New Email:");
+                        newValue=sc.nextLine().trim();
+                        System.out.println("Invalid email address.");
+                        }
+                    }
+        
+       if (cm.editContact(editKeyword, fieldChoice, newValue)) {
+                        fileHandler.saveContacts(cm.getAllContacts());
+                        System.out.println("Contact updated successfully!");
+                    } else {
+                        System.out.println("Contact could not be updated.");
+                    }
+
                 }
             }
 
@@ -300,7 +372,7 @@ do {
         
     }
      
-    }
-           sc.close();
+    } 
+         sc.close();
     }
 }
