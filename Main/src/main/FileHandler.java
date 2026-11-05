@@ -7,10 +7,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;                      
+import java.io.FileInputStream;           
+import java.io.FileOutputStream; 
+import java.io.ObjectInputStream;         
+import java.io.ObjectOutputStream;        
+import java.time.LocalDateTime; 
 
 public class FileHandler {
 
     private final String filePath;
+private static final String SERIAL_FILE = "Contacts.dat";
 
     // Constructor
     public FileHandler(String filePath) {
@@ -18,9 +25,8 @@ public class FileHandler {
     }
 
     // Save all contacts to a file
-    public void saveContacts(List<Contact> contacts) {
-        try (BufferedWriter writer =
-                 new BufferedWriter(new FileWriter(filePath))) {
+    public synchronized void saveContacts(List<Contact> contacts) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
             for (Contact contact : contacts) {
                 writer.write(
@@ -41,13 +47,23 @@ public class FileHandler {
             );
         }
     }
+    //
+     public void saveContactsAsync(List<Contact> contacts) {
+        List<Contact> copy = new ArrayList<>(contacts);   // copy, so the list cannot change while saving
+        Thread saveThread = new Thread(() -> saveContacts(copy));
+        saveThread.start();
+    }
 
     // Load contacts from a file
     public List<Contact> loadContacts() {
         List<Contact> contacts = new ArrayList<>();
+        
+         File file = new File(filePath);
+        if (!file.exists()) {
+            return contacts;
+        }
 
-        try (BufferedReader reader =
-                 new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
             String line;
 
@@ -77,6 +93,37 @@ public class FileHandler {
         }
 
         return contacts;
+    }
+         // Serialization: saves the list of Contact objects to Contacts.dat
+    // Time complexity: O(n)
+    public void saveContactsSerialized(List<Contact> contacts) {
+        try (ObjectOutputStream out =
+                 new ObjectOutputStream(new FileOutputStream(SERIAL_FILE))) {
+
+            out.writeObject(new ArrayList<>(contacts));
+            System.out.println("Contacts serialized successfully.");
+
+        } catch (IOException e) {
+            System.out.println("Error serializing contacts: " + e.getMessage());
+        }
+    }
+
+    // Serialization: loads the list of Contact objects from Contacts.dat
+    public List<Contact> loadContactsSerialized() {
+        File file = new File(SERIAL_FILE);
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+
+        try (ObjectInputStream in =
+                 new ObjectInputStream(new FileInputStream(SERIAL_FILE))) {
+
+            return (List<Contact>) in.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading serialized contacts: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Log an action to a separate file

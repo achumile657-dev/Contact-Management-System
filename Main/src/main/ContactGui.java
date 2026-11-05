@@ -10,11 +10,8 @@ package main;
  * @author USER
  */
 public class ContactGui extends javax.swing.JFrame {
-        private FileHandler fileHandler;
-        private ContactManager contactManager;
-
-        private java.util.List<Contact> contacts =
-        new java.util.ArrayList<>();
+      private FileHandler fileHandler;
+      private ContactManager contactManager;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ContactGui.class.getName());
 
@@ -22,41 +19,36 @@ public class ContactGui extends javax.swing.JFrame {
      * Creates new form ContactGui
      */
     public ContactGui() {
-
-    initComponents();
-
-    // Connect to FileHandler
-    fileHandler = new FileHandler("Contacts.csv");
-    contactManager = new ContactManager();
-    
-    // Load existing contacts from file directly into the ContactManager
-        java.util.List<Contact> loadedContacts = fileHandler.loadContacts();
-        if (loadedContacts != null) {
-            for (Contact c : loadedContacts) {
-                contactManager.addContact(c);
-            }
-        }
-
-    // Load contacts from the file
-    contacts = fileHandler.loadContacts();
-
-    // Display the contacts in the table
-    refreshTable();
-    
-        
-    // Connect the Delete button
-    delBtn.addActionListener(e -> handleDeleteButton());
-    addBtn.addActionListener(e -> handleAddButton());
-    editBtn.addActionListener(e -> handleEditButton());
-    searchButton.addActionListener(e -> handleSearchButton());
-    searchBar.addActionListener(e -> handleSearchButton());
-    
-    refreshBtn.setText("SHOW ALL");
-    refreshBtn.addActionListener(e -> handleRefreshButton());
-    
-    exitBtn.setText("EXIT");
-    exitBtn.addActionListener(e -> handleExitButton());
+         this(loadManager());
 }
+     private static ContactManager loadManager() {
+        ContactManager manager = new ContactManager();
+        for (Contact c : new FileHandler("Contacts.csv").loadContacts()) {
+            manager.addContact(c);
+        }
+        return manager;
+    }
+     
+    public ContactGui(ContactManager manager) {
+        initComponents();
+
+        fileHandler = new FileHandler("Contacts.csv");
+        contactManager = manager;
+
+        refreshTable();
+
+        delBtn.addActionListener(e -> handleDeleteButton());
+        addBtn.addActionListener(e -> handleAddButton());
+        editBtn.addActionListener(e -> handleEditButton());
+        searchButton.addActionListener(e -> handleSearchButton());
+        searchBar.addActionListener(e -> handleSearchButton());
+
+        refreshBtn.setText("SHOW ALL");
+        refreshBtn.addActionListener(e -> handleRefreshButton());
+
+        exitBtn.setText("EXIT");
+        exitBtn.addActionListener(e -> handleExitButton());
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -216,160 +208,143 @@ public class ContactGui extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ContactGui().setVisible(true));
     }
-    
+        // Adds a new contact after checking every field
     public void handleAddButton() {
-        // Validate First Name (Compulsory)
-    String firstName;
-    while (true) {
-        firstName = javax.swing.JOptionPane.showInputDialog(this, "Enter First Name:");
-        if (firstName == null) return; // User clicked Cancel
-        firstName = firstName.trim();
-        
-        if (Main.isValidName(firstName)) {
-            break; // Valid, exit loop
+        String firstName;
+        while (true) {
+            firstName = javax.swing.JOptionPane.showInputDialog(this, "Enter First Name:");
+            if (firstName == null) return;
+            firstName = firstName.trim();
+
+            if (Main.isValidName(firstName)) {
+                break;
+            }
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Invalid first name. Must contain at least letters (digits and spaces are allowed).",
+                "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "Invalid first name. Must contain at least letters (digits and spaces are allowed).", 
-            "Validation Error", 
-            javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
-    
-   // Validate Last Name (Compulsory, text required, digits allowed)
-    String lastName;
-    while (true) {
-        lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
-        if (lastName == null) return; // User clicked Cancel
-        lastName = lastName.trim();
-        
-        if (Main.isValidName(lastName)) {
-            break; // Valid, exit loop
+
+        String lastName;
+        while (true) {
+            lastName = javax.swing.JOptionPane.showInputDialog(this, "Enter Last Name:");
+            if (lastName == null) return;
+            lastName = lastName.trim();
+
+            if (Main.isValidName(lastName)) {
+                break;
+            }
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Invalid last name. Must contain at least letters (digits and spaces are allowed).",
+                "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "Invalid last name. Must contain at least letters (digits and spaces are allowed).", 
-            "Validation Error", 
-            javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
-        
-        
-        // Validate Email using Main.java logic
+
         String email;
         while (true) {
             email = javax.swing.JOptionPane.showInputDialog(this, "Enter Email:");
             if (email == null) return;
             email = email.trim();
+
             if (Main.isValidEmail(email)) {
                 break;
             }
-            javax.swing.JOptionPane.showMessageDialog(this, "Invalid email address format.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid email address format.",
+                "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        
-        // Validate Phone Number using Main.java logic
+
         String phone;
         while (true) {
             phone = javax.swing.JOptionPane.showInputDialog(this, "Enter Phone Number (e.g., 0821234567):");
             if (phone == null) return;
             phone = phone.trim();
+
             if (Main.isValidPhoneNumber(phone)) {
                 break;
             }
-            javax.swing.JOptionPane.showMessageDialog(this, "Invalid South African phone number. Must start with 06, 07, or 08 and be 10 digits total.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Invalid South African phone number. Must start with 06, 07, or 08 and be 10 digits total.",
+                "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
 
-        // Create and add new contact
-        Contact newContact = new Contact(firstName.trim(), lastName.trim(), phone, email);
+        // Do not allow two contacts with the same phone number
+        if (contactManager.isDuplicate(phone)) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "A contact with this phone number already exists.",
+                "Duplicate", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        // Add contact to the main contacts list
-        contacts.add(newContact);
+        // First letter of each name becomes a capital
+        firstName = Main.capitalFirstLetter(firstName);
+        lastName = Main.capitalFirstLetter(lastName);
 
-        // Save updated list to file
-        fileHandler.saveContacts(contacts);
+        contactManager.addContact(new Contact(firstName, lastName, phone, email));
+
+        // Save in a background thread (multithreading)
+        fileHandler.saveContactsAsync(contactManager.getAllContacts());
         fileHandler.logAction("Added contact: " + firstName + " " + lastName);
 
-refreshTable();
-
-javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
-    }
-    
-    public void refreshTable() {
-      contacts.sort(
-    java.util.Comparator.comparing(Contact::getFirstName,String.CASE_INSENSITIVE_ORDER));
-
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-
-    // Remove existing rows
-         model.setRowCount(0);
-
-    // Add contacts from the list
-        for (Contact contact : contacts) {
-
-        model.addRow(new Object[]{
-            contact.getFirstName(),
-            contact.getLastName(),
-            contact.getEmail(),
-            contact.getPhoneNumber()
-        });
-    }
-}
-    
-    public void handleRefreshButton() {
-    searchBar.setText(""); // Clear the search bar text
-    contacts = fileHandler.loadContacts(); // Reload all contacts from file/storage
-    refreshTable(); // Redisplay the full list in the table
-}
-    
-    public void handleDeleteButton() {
-
-    // Get the selected row
-    int selectedRow = jTable1.getSelectedRow();
-
-    // Check whether a row was selected
-    if (selectedRow == -1) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please select a contact to delete."
-        );
-
-        return;
-    }
-
-    // Confirm deletion
-    int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to delete this contact?",
-            "Confirm Delete",
-            javax.swing.JOptionPane.YES_NO_OPTION
-    );
-
-    // Continue only if the user clicks YES
-    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-
-        // Get the contact before removing it
-        Contact deletedContact = contacts.get(selectedRow);
-
-        // Remove the contact from the list
-        contacts.remove(selectedRow);
-
-        // Save the updated list to the file
-        fileHandler.saveContacts(contacts);
-
-        // Record the deletion
-        fileHandler.logAction(
-                "Deleted contact: "
-                + deletedContact.getFirstName() + " "
-                + deletedContact.getLastName()
-        );
-
-        // Refresh the table
         refreshTable();
-
-        // Inform the user
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Contact deleted successfully."
-        );
+        javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
     }
-}
+
+    // Sorts with ContactManager, then shows every contact
+    public void refreshTable() {
+        contactManager.sortContacts();
+        showContacts(contactManager.getAllContacts());
+    }
+
+    // Shows the given list in the table
+    private void showContacts(java.util.List<Contact> list) {
+        javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        for (Contact contact : list) {
+            model.addRow(new Object[]{
+                contact.getFirstName(),
+                contact.getLastName(),
+                contact.getEmail(),
+                contact.getPhoneNumber()
+            });
+        }
+    }
+
+    // Finds the contact for the selected row (works after a search too)
+    private Contact getSelectedContact(int row) {
+        String phone = jTable1.getValueAt(row, 3).toString();
+        return contactManager.searchContact(phone);
+    }
+
+    public void handleRefreshButton() {
+        searchBar.setText("");
+        refreshTable();
+    }
+
+    public void handleDeleteButton() {
+        int selectedRow = jTable1.getSelectedRow();
+
+        if (selectedRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a contact to delete.");
+            return;
+        }
+
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this, "Are you sure you want to delete this contact?",
+            "Confirm Delete", javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            Contact deleted = getSelectedContact(selectedRow);
+            contactManager.deleteContact(deleted.getPhoneNumber());
+
+            fileHandler.saveContactsAsync(contactManager.getAllContacts());
+            fileHandler.logAction("Deleted contact: "
+                + deleted.getFirstName() + " " + deleted.getLastName());
+
+            refreshTable();
+            javax.swing.JOptionPane.showMessageDialog(this, "Contact deleted successfully.");
+        }
+    }
+
     public void handleEditButton() {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
@@ -377,81 +352,82 @@ javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
             return;
         }
 
-        Contact contact = contacts.get(selectedRow);
+        Contact contact = getSelectedContact(selectedRow);
 
-        // Show input dialogs pre-filled with existing values
         String firstName = javax.swing.JOptionPane.showInputDialog(this, "Edit First Name:", contact.getFirstName());
-        if (firstName == null || firstName.trim().isEmpty()) return;
+        if (firstName == null) {
+            return;
+        }
+        if (!Main.isValidName(firstName.trim())) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid first name.");
+            return;
+        }
 
         String lastName = javax.swing.JOptionPane.showInputDialog(this, "Edit Last Name:", contact.getLastName());
-        if (lastName == null || lastName.trim().isEmpty()) return;
+        if (lastName == null) {
+            return;
+        }
+        if (!Main.isValidName(lastName.trim())) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid last name.");
+            return;
+        }
 
         String email = javax.swing.JOptionPane.showInputDialog(this, "Edit Email:", contact.getEmail());
-        if (email == null || email.trim().isEmpty()) return;
+        if (email == null) {
+            return;
+        }
+        if (!Main.isValidEmail(email.trim())) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid email address.");
+            return;
+        }
 
         String phone = javax.swing.JOptionPane.showInputDialog(this, "Edit Phone Number:", contact.getPhoneNumber());
-        if (phone == null || phone.trim().isEmpty()) return;
+        if (phone == null) {
+            return;
+        }
+        phone = phone.trim();
+        if (!Main.isValidPhoneNumber(phone)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid South African phone number.");
+            return;
+        }
+        if (!phone.equals(contact.getPhoneNumber()) && contactManager.isDuplicate(phone)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "That phone number already exists.");
+            return;
+        }
 
-        // Update contact object (if your Contact class has setter methods, you can call those instead)
-        // This creates a replacement object in the list
-        Contact updatedContact = new Contact(firstName.trim(), lastName.trim(), phone.trim(), email.trim());
-        contacts.set(selectedRow, updatedContact);
+        contact.setFirstName(Main.capitalFirstLetter(firstName));
+        contact.setLastName(Main.capitalFirstLetter(lastName));
+        contact.setEmail(email.trim());
+        contact.setPhoneNumber(phone);
 
-        // Save changes to file and log
-        fileHandler.saveContacts(contacts);
-        fileHandler.logAction("Edited contact: " + firstName + " " + lastName);
+        fileHandler.saveContactsAsync(contactManager.getAllContacts());
+        fileHandler.logAction("Edited contact: " + contact.getFirstName() + " " + contact.getLastName());
 
         refreshTable();
         javax.swing.JOptionPane.showMessageDialog(this, "Contact updated successfully!");
     }
-    
+
     public void handleExitButton() {
-    int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to exit the Contact Manager?",
-            "Confirm Exit",
-            javax.swing.JOptionPane.YES_NO_OPTION
-    );
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this, "Are you sure you want to exit the Contact Manager?",
+            "Confirm Exit", javax.swing.JOptionPane.YES_NO_OPTION);
 
-    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-        System.exit(0); // Closes the application completely
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            fileHandler.saveContactsSerialized(contactManager.getAllContacts());
+            System.exit(0);
+        }
     }
-}
 
+    // Search uses the stream in ContactManager.filterContacts()
     public void handleSearchButton() {
-        String query = searchBar.getText().trim().toLowerCase();
+        String query = searchBar.getText().trim();
         if (query.isEmpty()) {
-            // If search is empty, reload all contacts from file
-            contacts = fileHandler.loadContacts();
             refreshTable();
             return;
         }
-
-        // Filter the table rows based on what matches the search bar
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-
-        for (Contact contact : contacts) {
-            boolean match = (contact.getFirstName() != null && contact.getFirstName().toLowerCase().contains(query)) ||
-                            (contact.getLastName() != null && contact.getLastName().toLowerCase().contains(query)) ||
-                            (contact.getEmail() != null && contact.getEmail().toLowerCase().contains(query)) ||
-                            (String.valueOf(contact.getPhoneNumber()).toLowerCase().contains(query));
-
-            if (match) {
-                model.addRow(new Object[]{
-                    contact.getFirstName(),
-                    contact.getLastName(),
-                    contact.getEmail(),
-                    contact.getPhoneNumber()
-                });
-            }
-        }
+        showContacts(contactManager.filterContacts(query));
     }
-    
-  
 
-
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton delBtn;

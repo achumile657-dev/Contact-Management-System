@@ -9,7 +9,7 @@ package main;
  *
  * @author USER
  */
-public class Contact {
+public class Contact  implements java.io.Serializable{
 
 // Attributes
     private String firstName;

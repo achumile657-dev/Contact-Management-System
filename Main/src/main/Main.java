@@ -20,7 +20,24 @@ public class Main {
    public static boolean isValidName(String name) {
     return name != null && name.matches("^(?=.*[A-Za-z])[A-Za-z0-9\\s'-]+$");
 }
-   
+   // Makes the first letter of each word a capital and the rest small
+   public static String capitalFirstLetter(String name) {
+    StringBuilder result = new StringBuilder();
+    boolean newWord = true;
+
+    for (char ch : name.trim().toCharArray()) {
+        if (newWord && Character.isLetter(ch)) {
+            result.append(Character.toUpperCase(ch));
+            newWord = false;
+        } else {
+            result.append(Character.toLowerCase(ch));
+        }
+        if (ch == ' ' || ch == '-' || ch == '\'') {
+            newWord = true;
+        }
+    }
+    return result.toString();
+}
    //Email validation
     public static boolean isValidEmail(String email) {
     return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
@@ -30,9 +47,14 @@ public class Main {
         // TODO code application logic here
         Scanner sc = new Scanner(System.in);
     
+         // Load the saved contacts 
     FileHandler fileHandler = new FileHandler("Contacts.csv");
-    
     ContactManager cm = new ContactManager();
+    
+     for (Contact c : fileHandler.loadContacts()) {
+            cm.addContact(c);
+        }
+     
     ContactGui gui = new ContactGui();
     gui.setVisible(true);
     
@@ -40,7 +62,7 @@ public class Main {
     System.out.println("---------------CONTACT MANAGEMENT SYSTEM--------------------");
    
     System.out.println("Contact list empty! Add your first contact!");
-    
+    /*
    System.out.print("Enter first name: ");
    String firstName = sc.nextLine();
  
@@ -79,7 +101,7 @@ do {
    fileHandler.saveContacts(contacts);
     
     System.out.println("Contact added successfully!");
-    
+    */
     boolean running = true;
 
         while (running) {
@@ -105,13 +127,14 @@ do {
                 case 1 -> {
                     // Add Contact
                     System.out.print("Enter First Name: ");
-                    firstName = sc.nextLine();
+                    String firstName = sc.nextLine();
                     System.out.print("Enter Last Name: ");
-                    lastName = sc.nextLine();
-                    //validate phone number 
+                    String lastName = sc.nextLine();
+                    //validate phone number
+                    String phoneNumber;
                     do {
                         System.out.print("Enter Phone Number: ");
-                        phoneNumber = sc.nextLine();
+                       phoneNumber = sc.nextLine();
 
                         if (!isValidPhoneNumber(phoneNumber)) {
                             System.out.println("Invalid South African phone number.");
@@ -120,6 +143,7 @@ do {
                     } while (!isValidPhoneNumber(phoneNumber));
                     
                     //Validate email
+                    String email;
                     do {
                         System.out.print("Enter Email: ");
                         email = sc.nextLine();
