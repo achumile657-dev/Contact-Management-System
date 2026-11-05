@@ -260,17 +260,19 @@ public class ContactGui extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Invalid South African phone number. Must start with 06, 07, or 08 and be 10 digits total.", "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
 
-        // Use ContactManager to add
+        // Create and add new contact
         Contact newContact = new Contact(firstName.trim(), lastName.trim(), phone, email);
-        contactManager.addContact(newContact);
+
+        // Add contact to the main contacts list
+        contacts.add(newContact);
 
         // Save updated list to file
-        fileHandler.saveContacts(contactManager.getAllContacts());
+        fileHandler.saveContacts(contacts);
         fileHandler.logAction("Added contact: " + firstName + " " + lastName);
 
-        contacts = fileHandler.loadContacts();
-        refreshTable();
-        javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
+refreshTable();
+
+javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
     }
     
     public void refreshTable() {
