@@ -291,6 +291,8 @@ javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
     }
     
     public void refreshTable() {
+      contacts.sort(
+    java.util.Comparator.comparing(Contact::getFirstName,String.CASE_INSENSITIVE_ORDER));
 
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
