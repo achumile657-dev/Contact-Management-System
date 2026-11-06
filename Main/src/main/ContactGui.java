@@ -74,7 +74,7 @@ public class ContactGui extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
-        searchButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\search.png")); // NOI18N
+        searchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/icons/search.png"))); // NOI18N
         searchButton.setText("SEARCH");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -98,23 +98,23 @@ public class ContactGui extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
-        addBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\add.png")); // NOI18N
+        addBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/icons/add.png"))); // NOI18N
         addBtn.setText("ADD");
         addBtn.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         addBtn.addActionListener(this::addBtnActionPerformed);
 
-        delBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\delete.png")); // NOI18N
+        delBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/icons/delete.png"))); // NOI18N
         delBtn.setText("DELETE");
 
-        editBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\edit.png")); // NOI18N
+        editBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/icons/edit.png"))); // NOI18N
         editBtn.setText("EDIT");
 
-        refreshBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\refresh.png")); // NOI18N
+        refreshBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/icons/refresh.png"))); // NOI18N
         refreshBtn.setText("REFRESH");
 
         exitBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         exitBtn.setForeground(new java.awt.Color(255, 0, 0));
-        exitBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\exit.png")); // NOI18N
+        exitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/icons/exit.png"))); // NOI18N
         exitBtn.setText("EXIT");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

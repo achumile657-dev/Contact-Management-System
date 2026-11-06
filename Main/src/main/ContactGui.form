@@ -110,7 +110,7 @@
         <Component class="javax.swing.JButton" name="searchButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\goles\Downloads\icons\search.png"/>
+              <Image iconType="3" name="/main/icons/search.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="SEARCH"/>
           </Properties>
@@ -136,7 +136,7 @@
         <Component class="javax.swing.JButton" name="addBtn">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\goles\Downloads\icons\add.png"/>
+              <Image iconType="3" name="/main/icons/add.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="ADD"/>
             <Property name="horizontalTextPosition" type="int" value="4"/>
@@ -148,7 +148,7 @@
         <Component class="javax.swing.JButton" name="delBtn">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\goles\Downloads\icons\delete.png"/>
+              <Image iconType="3" name="/main/icons/delete.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="DELETE"/>
           </Properties>
@@ -156,7 +156,7 @@
         <Component class="javax.swing.JButton" name="editBtn">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\goles\Downloads\icons\edit.png"/>
+              <Image iconType="3" name="/main/icons/edit.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="EDIT"/>
           </Properties>
@@ -164,7 +164,7 @@
         <Component class="javax.swing.JButton" name="refreshBtn">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\goles\Downloads\icons\refresh.png"/>
+              <Image iconType="3" name="/main/icons/refresh.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="REFRESH"/>
           </Properties>
@@ -178,7 +178,7 @@
               <Color blue="0" green="0" red="ff" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\goles\Downloads\icons\exit.png"/>
+              <Image iconType="3" name="/main/icons/exit.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="EXIT"/>
           </Properties>
