@@ -10,7 +10,7 @@ package main;
  * @author USER
  */
 import java.util.List;
- import java.util.Scanner;
+import java.util.Scanner;
 
 public class Main {
     //Phone number validation
@@ -62,46 +62,7 @@ public class Main {
     System.out.println("---------------CONTACT MANAGEMENT SYSTEM--------------------");
    
     System.out.println("Contact list empty! Add your first contact!");
-    /*
-   System.out.print("Enter first name: ");
-   String firstName = sc.nextLine();
- 
-   System.out.print("Enter last name: ");
-   String lastName=sc.nextLine();
    
-   String phoneNumber;
-   String email;
-
-   //Number validation
- do {
-    System.out.print("Enter phone number: ");
-    phoneNumber = sc.nextLine();
-
-    if (!isValidPhoneNumber(phoneNumber)) {
-        System.out.println("Invalid South African phone number.");
-    }
-
-} while (!isValidPhoneNumber(phoneNumber));
- 
-//Email validation
-do {
-    System.out.print("Enter email: ");
-    email = sc.nextLine();
-
-    if (!isValidEmail(email)) {
-        System.out.println("Invalid email address.");
-    }
-
-} while (!isValidEmail(email));
-   
-   Contact contact = new Contact(firstName,lastName,phoneNumber, email);
-   cm.addContact(contact);
-    
-   List<Contact> contacts = fileHandler.loadContacts();
-   fileHandler.saveContacts(contacts);
-    
-    System.out.println("Contact added successfully!");
-    */
     boolean running = true;
 
         while (running) {

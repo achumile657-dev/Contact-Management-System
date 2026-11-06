@@ -74,6 +74,7 @@ public class ContactGui extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
+        searchButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\search.png")); // NOI18N
         searchButton.setText("SEARCH");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -97,17 +98,23 @@ public class ContactGui extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
+        addBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\add.png")); // NOI18N
         addBtn.setText("ADD");
+        addBtn.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         addBtn.addActionListener(this::addBtnActionPerformed);
 
+        delBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\delete.png")); // NOI18N
         delBtn.setText("DELETE");
 
+        editBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\edit.png")); // NOI18N
         editBtn.setText("EDIT");
 
+        refreshBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\refresh.png")); // NOI18N
         refreshBtn.setText("REFRESH");
 
         exitBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         exitBtn.setForeground(new java.awt.Color(255, 0, 0));
+        exitBtn.setIcon(new javax.swing.ImageIcon("C:\\Users\\goles\\Downloads\\icons\\exit.png")); // NOI18N
         exitBtn.setText("EXIT");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -115,33 +122,29 @@ public class ContactGui extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(addBtn)
-                        .addGap(160, 160, 160)
-                        .addComponent(delBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
-                        .addComponent(editBtn))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(refreshBtn)))
+                .addGap(65, 65, 65)
+                .addComponent(addBtn)
+                .addGap(160, 160, 160)
+                .addComponent(delBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(editBtn)
                 .addGap(65, 65, 65))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(556, 556, 556)
+                        .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(searchButton)
-                                .addGap(121, 121, 121))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(277, 277, 277)
-                        .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(10, 10, 10)
+                                .addComponent(refreshBtn)))))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +163,7 @@ public class ContactGui extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
