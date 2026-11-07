@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package main;
-
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import com.google.i18n.phonenumbers.NumberParseException;
 
 /**
  *
@@ -13,9 +15,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    //Phone number validation
-   public static boolean isValidPhoneNumber(String phoneNumber) {
-    return phoneNumber.matches("0[6-8][0-9]{8}");
+ // International phone number validation using Google libphonenumber
+public static boolean isValidPhoneNumber(String phoneNumber) {
+
+    if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+        return false;
+    }
+
+    try {
+        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+
+        Phonenumber.PhoneNumber number =
+                phoneUtil.parse(phoneNumber.trim(), null);
+
+        return phoneUtil.isValidNumber(number);
+
+    } catch (NumberParseException e) {
+        return false;
+    }
 }
    public static boolean isValidName(String name) {
     return name != null && name.matches("^(?=.*[A-Za-z])[A-Za-z0-9\\s'-]+$");
@@ -91,18 +108,23 @@ public class Main {
                     String firstName = sc.nextLine();
                     System.out.print("Enter Last Name: ");
                     String lastName = sc.nextLine();
+                    
                     //validate phone number
                     String phoneNumber;
                     do {
-                        System.out.print("Enter Phone Number: ");
-                       phoneNumber = sc.nextLine();
+                        System.out.print("Enter International Phone Number (e.g. +27 82 123 4567): ");
+                       phoneNumber = sc.nextLine().trim();
 
                         if (!isValidPhoneNumber(phoneNumber)) {
-                            System.out.println("Invalid South African phone number.");
+                            System.out.println("Invalid phone number. Please include the country code (e.g. +27).");
                         }
-
-                    } while (!isValidPhoneNumber(phoneNumber));
+                     } while (!isValidPhoneNumber(phoneNumber));
                     
+                    // Check for duplicate phone numbers
+                    if (cm.isDuplicate(phoneNumber)) {
+                    System.out.println("A contact with this phone number already exists.");
+                    break;
+                             }
                     //Validate email
                     String email;
                     do {
@@ -276,7 +298,7 @@ public class Main {
                     newPhone = sc.nextLine().trim();
 
                     if (!isValidPhoneNumber(newPhone)) {
-                        System.out.println("Invalid South African phone number.");
+                        System.out.println("Invalid phone number.");
                     }
 
                 } while (!isValidPhoneNumber(newPhone));

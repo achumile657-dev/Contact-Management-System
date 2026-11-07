@@ -1,5 +1,7 @@
 package main;
-
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import com.google.i18n.phonenumbers.NumberParseException;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -89,7 +91,7 @@ public class ContactGui extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -254,40 +256,114 @@ public class ContactGui extends javax.swing.JFrame {
                 "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
 
-        String phone;
-        while (true) {
-            phone = javax.swing.JOptionPane.showInputDialog(this, "Enter Phone Number (e.g., 0821234567):");
-            if (phone == null) return;
-            phone = phone.trim();
+        
+        
+         String phone;
+        
+        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
-            if (Main.isValidPhoneNumber(phone)) {
-                break;
-            }
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Invalid South African phone number. Must start with 06, 07, or 08 and be 10 digits total.",
-                "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+java.util.List<String> countries = new java.util.ArrayList<>();
+java.util.List<String> countryRegions = new java.util.ArrayList<>();
+
+for (String region : phoneUtil.getSupportedRegions()) {
+    String countryName =new java.util.Locale("", region).getDisplayCountry();
+
+    int callingCode = phoneUtil.getCountryCodeForRegion(region);
+
+    if (callingCode != 0) {
+        
+       countries.add(countryName + " (+" + callingCode + ")");
+       countryRegions.add(region); }
+} // Sort alphabetically while keeping country regions matched
+for (int i = 0; i < countries.size(); i++) {
+    for (int j = i + 1; j < countries.size(); j++) {
+
+        if (countries.get(i).compareToIgnoreCase(countries.get(j)) > 0) {
+
+            String tempCountry = countries.get(i);
+            countries.set(i, countries.get(j));
+            countries.set(j, tempCountry);
+
+            String tempRegion = countryRegions.get(i);
+            countryRegions.set(i, countryRegions.get(j));
+            countryRegions.set(j, tempRegion);
+        }
+    }
+}
+        
+
+      // Ask the user to select a country
+      Object selectedCountry = javax.swing.JOptionPane.showInputDialog(
+        this,"Select Country:","Country Selection",
+        javax.swing.JOptionPane.QUESTION_MESSAGE,null,countries.toArray(),
+        countries.get(0)
+                      );
+
+            if(selectedCountry == null) return;
+
+           int countryIndex = countries.indexOf(selectedCountry.toString());
+           String selectedRegion = countryRegions.get(countryIndex);
+// Ask for the local phone number
+while (true) {
+
+    String localPhone = javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Enter new local phone number (e.g. 0821234567):"
+    );
+
+    if (localPhone == null) {
+        return;
+    }
+
+    localPhone = localPhone.trim().replaceAll("[\\s-]", "");
+
+    try {
+        Phonenumber.PhoneNumber parsedNumber =
+                phoneUtil.parse(localPhone, selectedRegion);
+
+        if (phoneUtil.isValidNumberForRegion(parsedNumber, selectedRegion)) {
+
+            phone = phoneUtil.format(
+                    parsedNumber,
+                    PhoneNumberUtil.PhoneNumberFormat.E164
+            );
+
+            break;
         }
 
-        // Do not allow two contacts with the same phone number
-        if (contactManager.isDuplicate(phone)) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "A contact with this phone number already exists.",
-                "Duplicate", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    } catch (NumberParseException e) {
+        // Invalid phone number
+    }
 
-        // First letter of each name becomes a capital
-        firstName = Main.capitalFirstLetter(firstName);
-        lastName = Main.capitalFirstLetter(lastName);
+    javax.swing.JOptionPane.showMessageDialog(this,
+            "Invalid phone number. Please enter a valid local number.",
+            "Validation Error",
+            javax.swing.JOptionPane.ERROR_MESSAGE);
+}
+// Do not allow two contacts with the same phone number
+if (contactManager.isDuplicate(phone)) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+            "A contact with this phone number already exists.",
+            "Duplicate", javax.swing.JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
-        contactManager.addContact(new Contact(firstName, lastName, phone, email));
+// Capitalise the first letter of each name
+firstName = Main.capitalFirstLetter(firstName);
+lastName = Main.capitalFirstLetter(lastName);
 
-        // Save in a background thread (multithreading)
-        fileHandler.saveContactsAsync(contactManager.getAllContacts());
-        fileHandler.logAction("Added contact: " + firstName + " " + lastName);
+// Add the new contact
+contactManager.addContact(
+        new Contact(firstName, lastName, phone, email));
 
-        refreshTable();
-        javax.swing.JOptionPane.showMessageDialog(this, "Contact added successfully!");
+// Save and log the new contact
+fileHandler.saveContactsAsync(contactManager.getAllContacts());
+fileHandler.logAction("Added contact: " + firstName + " " + lastName);
+
+refreshTable();
+
+javax.swing.JOptionPane.showMessageDialog(
+        this, "Contact added successfully!");
     }
 
     // Sorts with ContactManager, then shows every contact
@@ -347,8 +423,8 @@ public class ContactGui extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Contact deleted successfully.");
         }
     }
-
-    public void handleEditButton() {
+ public void handleEditButton()
+    {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Please select a contact to edit.");
@@ -384,31 +460,117 @@ public class ContactGui extends javax.swing.JFrame {
             return;
         }
 
-        String phone = javax.swing.JOptionPane.showInputDialog(this, "Edit Phone Number:", contact.getPhoneNumber());
-        if (phone == null) {
-            return;
-        }
-        phone = phone.trim();
-        if (!Main.isValidPhoneNumber(phone)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Invalid South African phone number.");
-            return;
-        }
-        if (!phone.equals(contact.getPhoneNumber()) && contactManager.isDuplicate(phone)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "That phone number already exists.");
-            return;
-        }
+              String phone;
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
-        contact.setFirstName(Main.capitalFirstLetter(firstName));
-        contact.setLastName(Main.capitalFirstLetter(lastName));
-        contact.setEmail(email.trim());
-        contact.setPhoneNumber(phone);
+java.util.List<String> countries = new java.util.ArrayList<>();
+java.util.List<String> countryRegions = new java.util.ArrayList<>();
 
-        fileHandler.saveContactsAsync(contactManager.getAllContacts());
-        fileHandler.logAction("Edited contact: " + contact.getFirstName() + " " + contact.getLastName());
+for (String region : phoneUtil.getSupportedRegions()) {
 
-        refreshTable();
-        javax.swing.JOptionPane.showMessageDialog(this, "Contact updated successfully!");
+    String countryName =
+            new java.util.Locale("", region).getDisplayCountry();
+
+    int callingCode = phoneUtil.getCountryCodeForRegion(region);
+
+    if (callingCode != 0) {
+        countries.add(countryName + " (+" + callingCode + ")");
+        countryRegions.add(region);
     }
+}
+
+// Sort alphabetically while keeping country regions matched
+for (int i = 0; i < countries.size(); i++) {
+    for (int j = i + 1; j < countries.size(); j++) {
+
+        if (countries.get(i).compareToIgnoreCase(countries.get(j)) > 0) {
+
+            String tempCountry = countries.get(i);
+            countries.set(i, countries.get(j));
+            countries.set(j, tempCountry);
+
+            String tempRegion = countryRegions.get(i);
+            countryRegions.set(i, countryRegions.get(j));
+            countryRegions.set(j, tempRegion);
+        }
+    }
+}
+// Ask the user to select a country
+Object selectedCountry = javax.swing.JOptionPane.showInputDialog(
+        this,"Select Country:","Country Selection",
+        javax.swing.JOptionPane.QUESTION_MESSAGE,null,
+        countries.toArray(),
+        countries.get(0));
+
+if (selectedCountry == null) {
+    return;
+}
+
+int countryIndex = countries.indexOf(selectedCountry.toString());
+String selectedRegion = countryRegions.get(countryIndex);
+    while (true) {
+
+    String localPhone = javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Enter new local phone number (e.g. 0821234567):"
+    );
+
+    if (localPhone == null) {
+        return;
+    }
+
+    localPhone = localPhone.trim().replaceAll("[\\s-]", "");
+
+    try {
+        Phonenumber.PhoneNumber parsedNumber =
+                phoneUtil.parse(localPhone, selectedRegion);
+
+        if (phoneUtil.isValidNumberForRegion(parsedNumber, selectedRegion)) {
+
+            phone = phoneUtil.format(
+                    parsedNumber,
+                    PhoneNumberUtil.PhoneNumberFormat.E164
+            );
+
+            if (!phone.equals(contact.getPhoneNumber())
+                    && contactManager.isDuplicate(phone)) {
+
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "That phone number already exists.");
+                return;
+            }
+
+            break;
+        }
+
+    } catch (NumberParseException e) {
+        // Invalid phone number
+    }
+
+    javax.swing.JOptionPane.showMessageDialog(this,
+            "Invalid phone number. Please enter a valid local number.",
+            "Validation Error",
+            javax.swing.JOptionPane.ERROR_MESSAGE);
+}
+
+// Update the selected contact
+contact.setFirstName(Main.capitalFirstLetter(firstName.trim()));
+contact.setLastName(Main.capitalFirstLetter(lastName.trim()));
+contact.setEmail(email.trim());
+contact.setPhoneNumber(phone);
+
+// Save changes
+fileHandler.saveContactsAsync(contactManager.getAllContacts());
+
+fileHandler.logAction("Edited contact: "
+        + contact.getFirstName() + " " + contact.getLastName());
+
+refreshTable();
+
+javax.swing.JOptionPane.showMessageDialog(
+        this,
+        "Contact updated successfully!"
+);}
 
     public void handleExitButton() {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
