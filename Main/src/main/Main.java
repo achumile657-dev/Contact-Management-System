@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class Main {
     //Phone number validation
    public static boolean isValidPhoneNumber(String phoneNumber) {
-    return phoneNumber.matches("0[6-8][0-9]{8}");
+    return phoneNumber.matches("0[1-9][0-9]{8}");
 }
    public static boolean isValidName(String name) {
     return name != null && name.matches("^(?=.*[A-Za-z])[A-Za-z0-9\\s'-]+$");

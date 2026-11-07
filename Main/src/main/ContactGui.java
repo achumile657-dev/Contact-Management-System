@@ -264,7 +264,7 @@ public class ContactGui extends javax.swing.JFrame {
                 break;
             }
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Invalid South African phone number. Must start with 06, 07, or 08 and be 10 digits total.",
+                "Invalid South African phone number. Must start with 0 and be 10 digits total.",
                 "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
 
