@@ -31,7 +31,7 @@ Both interfaces support the core contact management functionality, with contact 
 | Java | Core application development |
 | Apache NetBeans IDE 29 | Development environment |
 | Java Collections | Managing contact records |
-| Swing / GUI framework | Graphical user interface (if using Swing) |
+| Swing / GUI framework | Graphical user interface  |
 | CSV | Contact data storage |
 | Git | Version control |
 | GitHub | Team collaboration and code hosting |
